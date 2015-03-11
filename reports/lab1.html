@@ -1,0 +1,1324 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="author" content="Leedy"><style>body {
+  width: 45em;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 30px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><style>.codehilite pre .hll { background-color: #f8eec7 }
+.codehilite pre  { background: #ffffff; color: #333333 }
+.codehilite pre .c { color: #999988; font-style: italic } /* Comment */
+.codehilite pre .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+.codehilite pre .k { font-weight: bold } /* Keyword */
+.codehilite pre .n { color: #333333 } /* Name */
+.codehilite pre .o { font-weight: bold } /* Operator */
+.codehilite pre .cm { color: #999988; font-style: italic } /* Comment.Multiline */
+.codehilite pre .cp { color: #999999; font-weight: bold } /* Comment.Preproc */
+.codehilite pre .c1 { color: #999988; font-style: italic } /* Comment.Single */
+.codehilite pre .cs { color: #999988; font-style: italic } /* Comment.Special */
+.codehilite pre .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+.codehilite pre .ge { font-style: italic } /* Generic.Emph */
+.codehilite pre .gr { color: #aa0000 } /* Generic.Error */
+.codehilite pre .gh { color: #999999 } /* Generic.Heading */
+.codehilite pre .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+.codehilite pre .go { color: #888888 } /* Generic.Output */
+.codehilite pre .gp { color: #555555 } /* Generic.Prompt */
+.codehilite pre .gs { font-weight: bold } /* Generic.Strong */
+.codehilite pre .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite pre .gt { color: #aa0000 } /* Generic.Traceback */
+.codehilite pre .kc { font-weight: bold } /* Keyword.Constant */
+.codehilite pre .kd { font-weight: bold } /* Keyword.Declaration */
+.codehilite pre .kn { font-weight: bold } /* Keyword.Namespace */
+.codehilite pre .kp { font-weight: bold } /* Keyword.Pseudo */
+.codehilite pre .kr { font-weight: bold } /* Keyword.Reserved */
+.codehilite pre .kt { font-weight: bold } /* Keyword.Type */
+.codehilite pre .m { color: #945277 } /* Literal.Number */
+.codehilite pre .s { color: #df5000 } /* Literal.String */
+.codehilite pre .na { color: #008080 } /* Name.Attribute */
+.codehilite pre .nb { color: #0086b3 } /* Name.Builtin */
+.codehilite pre .nc { color: #445588; font-weight: bold } /* Name.Class */
+.codehilite pre .no { color: #094e99 } /* Name.Constant */
+.codehilite pre .nd { color: #333333 } /* Name.Decorator */
+.codehilite pre .ni { color: #800080 } /* Name.Entity */
+.codehilite pre .ne { color: #990000; font-weight: bold } /* Name.Exception */
+.codehilite pre .nf { color: #945277; font-weight: bold } /* Name.Function */
+.codehilite pre .nl { color: #333333 } /* Name.Label */
+.codehilite pre .nn { color: #555555 } /* Name.Namespace */
+.codehilite pre .nx { color: #333333 } /* Name.Other */
+.codehilite pre .py { color: #333333 } /* Name.Property */
+.codehilite pre .nt { color: #000080 } /* Name.Tag */
+.codehilite pre .nv { color: #008080 } /* Name.Variable */
+.codehilite pre .ow { font-weight: bold } /* Operator.Word */
+.codehilite pre .w { color: #bbbbbb } /* Text.Whitespace */
+.codehilite pre .mb { color: #945277 } /* Literal.Number.Bin */
+.codehilite pre .mf { color: #945277 } /* Literal.Number.Float */
+.codehilite pre .mh { color: #945277 } /* Literal.Number.Hex */
+.codehilite pre .mi { color: #945277 } /* Literal.Number.Integer */
+.codehilite pre .mo { color: #945277 } /* Literal.Number.Oct */
+.codehilite pre .sb { color: #df5000 } /* Literal.String.Backtick */
+.codehilite pre .sc { color: #df5000 } /* Literal.String.Char */
+.codehilite pre .sd { color: #df5000 } /* Literal.String.Doc */
+.codehilite pre .s2 { color: #df5000 } /* Literal.String.Double */
+.codehilite pre .se { color: #df5000 } /* Literal.String.Escape */
+.codehilite pre .sh { color: #df5000 } /* Literal.String.Heredoc */
+.codehilite pre .si { color: #df5000 } /* Literal.String.Interpol */
+.codehilite pre .sx { color: #df5000 } /* Literal.String.Other */
+.codehilite pre .sr { color: #017936 } /* Literal.String.Regex */
+.codehilite pre .s1 { color: #df5000 } /* Literal.String.Single */
+.codehilite pre .ss { color: #8b467f } /* Literal.String.Symbol */
+.codehilite pre .bp { color: #999999 } /* Name.Builtin.Pseudo */
+.codehilite pre .vc { color: #008080 } /* Name.Variable.Class */
+.codehilite pre .vg { color: #008080 } /* Name.Variable.Global */
+.codehilite pre .vi { color: #008080 } /* Name.Variable.Instance */
+.codehilite pre .il { color: #945277 } /* Literal.Number.Integer.Long */</style><title>Lab 1</title></head><body><article class="markdown-body"><h1 id="lab-1">Lab 1</h1>
+<h2 id="part-1-pc-bootstrap">Part 1: PC Bootstrap</h2>
+<h3 id="getting-started-with-x86-assembly">Getting Started with x86 assembly</h3>
+<blockquote>
+<p>Exercise 1. Familiarize yourself with the assembly language materials 
+available on the 6.828 reference page. You don&rsquo;t have to read them now, but 
+you&rsquo;ll almost certainly want to refer to some of this material when reading 
+and writing x86 assembly.</p>
+<p>We do recommend reading the section &ldquo;The Syntax&rdquo; in Brennan&rsquo;s Guide to 
+Inline Assembly. It gives a good (and quite brief) description of the AT&amp;T 
+assembly syntax we&rsquo;ll be using with the GNU assembler in JOS.</p>
+</blockquote>
+<p>由于在 ICS 课程和微机实验课程上都使用过 x86 汇编，因此这一部分还是比较熟悉的。</p>
+<h3 id="simulating-the-x86">Simulating the x86</h3>
+<p>这一步开始之前，需要先把环境给配置好。我原来有一个 Ubuntu 的虚拟机，但是没有安装桌面。结果安装了 qemu 之后启动提示找不到 X Window Server（后来想想可能运行 <code>make qemu-nox</code> 就可以了）。结果一怒之下决定在 Mac 上配置交叉编译环境。于是就陷入了一个大坑，虽然在 MIT 网站上有 instructions，但在实践过程中出现了以下问题：</p>
+<ol>
+<li>GCC 4.6.1 无法使用 clang 编译。最后查出来是一个 GCC 的 bug，patch 后成功编译。</li>
+<li>i386-jos-elf-gcc 不使用 i386-jos-elf-as 与 i386-jos-elf-ld。问题在于后两者是在 binutil 里提供的，而 gcc 在 configure 的时候无法正确找到它们，最后在 configure 时指定 <code>--with-as= --with-ld=</code> 解决。</li>
+<li>lab1 项目 <code>make gdb</code> 时找不到 i386-jos-elf-gdb。这个是因为 makefile 里写错了，改正过来就可以了。</li>
+</ol>
+<p>最终还是成功在 Mac OS X 平台上跑起来了，安装的代码也写成了一个 <a href="https://github.com/liudangyi/homebrew-i386-jos-elf-gcc">homebrew 脚本</a>。</p>
+<h3 id="the-pcs-physical-address-space">The PC&rsquo;s Physical Address Space</h3>
+<p>这一部分主要是知识，加深了自己对 MMIO（Memory-Mapped I/O）的认识，以及为什么比尔盖茨说「我们只需要 640 kb 的内存」。</p>
+<h3 id="the-rom-bios">The ROM BIOS</h3>
+<p>这一节主要了解了 GDB 的用法（远程调试！）和 CPU 的启动过程（CS 的初值是 0xf000，IP 的初值是 0xfff0）。不过这里有一个问题，就是为什么系统在启动之后，0xffff0 的内容不再是 <code>ljmp   $0xf000,$0xe05b</code> 而是变成了 <code>ljmp   $0x3630,$0xf000e05b</code>？通过 <code>watch *0xffff0</code> 可以发现是指令 <code>0xffff15fe:  rep movsb %ds:(%esi),%es:(%edi)</code> 在修改这部分内存，且此时 CR0 的最低位为1。由于此时 Boot Loader 还没有装载（0x7c00 此处内存还为空），可以初步判断 QEMU 的 BIOS 也会进入32位保护模式并访问 1MB 以上的内存。</p>
+<blockquote>
+<p>Exercise 2. Use GDB&rsquo;s si (Step Instruction) command to trace into the ROM BIOS for a few more instructions, and try to guess what it might be doing. You might want to look at Phil Storrs I/O Ports Description, as well as other materials on the 6.828 reference materials page. No need to figure out all the details - just the general idea of what the BIOS is doing first.</p>
+</blockquote>
+<p>0xfe05b 附近的代码如下</p>
+<div class="codehilite"><pre>     <span class="err">0</span><span class="nl">xfe05b:</span> <span class="nf">cmpl</span>   <span class="no">$0x0</span><span class="p">,</span><span class="nv">%cs</span><span class="p">:</span><span class="mi">0x6c30</span>
+     <span class="err">0</span><span class="nl">xfe062:</span> <span class="nf">jne</span>    <span class="mi">0xfd34d</span>
+     <span class="err">0</span><span class="nl">xfe066:</span> <span class="nf">xor</span>    <span class="nv">%ax</span><span class="p">,</span><span class="nv">%ax</span>
+     <span class="err">0</span><span class="nl">xfe068:</span> <span class="nf">mov</span>    <span class="nv">%ax</span><span class="p">,</span><span class="nv">%ss</span>
+     <span class="err">0</span><span class="nl">xfe06a:</span> <span class="nf">mov</span>    <span class="no">$0x7000</span><span class="p">,</span><span class="nv">%esp</span>
+     <span class="err">0</span><span class="nl">xfe070:</span> <span class="nf">mov</span>    <span class="no">$0xf2e17</span><span class="p">,</span><span class="nv">%edx</span>
+     <span class="err">0</span><span class="nl">xfe076:</span> <span class="nf">jmp</span>    <span class="mi">0xfd1be</span>
+     <span class="err">0</span><span class="nl">xfe079:</span> <span class="nf">push</span>   <span class="nv">%ebp</span>
+     <span class="err">0</span><span class="nl">xfe07b:</span> <span class="nf">push</span>   <span class="nv">%edi</span>
+     <span class="err">0</span><span class="nl">xfe07d:</span> <span class="nf">push</span>   <span class="nv">%esi</span>
+     <span class="err">0</span><span class="nl">xfe07f:</span> <span class="nf">push</span>   <span class="nv">%ebx</span>
+     <span class="err">0</span><span class="nl">xfe081:</span> <span class="nf">sub</span>    <span class="no">$0xc</span><span class="p">,</span><span class="nv">%esp</span>
+     <span class="err">0</span><span class="nl">xfe085:</span> <span class="nf">mov</span>    <span class="nv">%eax</span><span class="p">,</span><span class="nv">%esi</span>
+     <span class="err">0</span><span class="nl">xfe088:</span> <span class="nf">mov</span>    <span class="nv">%edx</span><span class="p">,(</span><span class="nv">%esp</span><span class="p">)</span>
+     <span class="err">0</span><span class="nl">xfe08d:</span> <span class="nf">mov</span>    <span class="nv">%ecx</span><span class="p">,</span><span class="nv">%edi</span>
+     <span class="err">0</span><span class="nl">xfe090:</span> <span class="nf">mov</span>    <span class="no">$0xe000</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe096:</span> <span class="nf">mov</span>    <span class="nv">%ax</span><span class="p">,</span><span class="nv">%es</span>
+     <span class="err">0</span><span class="nl">xfe098:</span> <span class="nf">mov</span>    <span class="nv">%es</span><span class="p">:</span><span class="mi">0xf7a0</span><span class="p">,</span><span class="nv">%al</span>
+     <span class="err">0</span><span class="nl">xfe09c:</span> <span class="nf">mov</span>    <span class="nv">%al</span><span class="p">,</span><span class="mi">0xa</span><span class="p">(</span><span class="nv">%esp</span><span class="p">)</span>
+     <span class="err">0</span><span class="nl">xfe0a1:</span> <span class="nf">and</span>    <span class="no">$0xffffffcc</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe0a5:</span> <span class="nf">or</span>     <span class="no">$0x30</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe0a9:</span> <span class="nf">mov</span>    <span class="nv">%al</span><span class="p">,</span><span class="mi">0xb</span><span class="p">(</span><span class="nv">%esp</span><span class="p">)</span>
+     <span class="err">0</span><span class="nl">xfe0ae:</span> <span class="nf">lea</span>    <span class="mi">0xb</span><span class="p">(</span><span class="nv">%esp</span><span class="p">),</span><span class="nv">%edx</span>
+     <span class="err">0</span><span class="nl">xfe0b4:</span> <span class="nf">mov</span>    <span class="no">$0x1060</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe0ba:</span> <span class="nf">calll</span>  <span class="mi">0xf8cef</span>
+     <span class="err">0</span><span class="nl">xfe0c0:</span> <span class="nf">test</span>   <span class="nv">%eax</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe0c3:</span> <span class="nf">jne</span>    <span class="mi">0xfe2ad</span>
+     <span class="err">0</span><span class="nl">xfe0c7:</span> <span class="nf">calll</span>  <span class="mi">0xf77f0</span>
+     <span class="err">0</span><span class="nl">xfe0cd:</span> <span class="nf">test</span>   <span class="nv">%esi</span><span class="p">,</span><span class="nv">%esi</span>
+     <span class="err">0</span><span class="nl">xfe0d0:</span> <span class="nf">je</span>     <span class="mi">0xfe0da</span>
+     <span class="err">0</span><span class="nl">xfe0d2:</span> <span class="nf">andb</span>   <span class="no">$0xdf</span><span class="p">,</span><span class="mi">0xb</span><span class="p">(</span><span class="nv">%esp</span><span class="p">)</span>
+     <span class="err">0</span><span class="nl">xfe0d8:</span> <span class="nf">jmp</span>    <span class="mi">0xfe0e0</span>
+     <span class="err">0</span><span class="nl">xfe0da:</span> <span class="nf">andb</span>   <span class="no">$0xef</span><span class="p">,</span><span class="mi">0xb</span><span class="p">(</span><span class="nv">%esp</span><span class="p">)</span>
+     <span class="err">0</span><span class="nl">xfe0e0:</span> <span class="nf">lea</span>    <span class="mi">0xb</span><span class="p">(</span><span class="nv">%esp</span><span class="p">),</span><span class="nv">%edx</span>
+     <span class="err">0</span><span class="nl">xfe0e6:</span> <span class="nf">mov</span>    <span class="no">$0x1060</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe0ec:</span> <span class="nf">calll</span>  <span class="mi">0xf8cef</span>
+     <span class="err">0</span><span class="nl">xfe0f2:</span> <span class="nf">mov</span>    <span class="nv">%eax</span><span class="p">,</span><span class="nv">%ebx</span>
+     <span class="err">0</span><span class="nl">xfe0f5:</span> <span class="nf">test</span>   <span class="nv">%eax</span><span class="p">,</span><span class="nv">%eax</span>
+     <span class="err">0</span><span class="nl">xfe0f8:</span> <span class="nf">jne</span>    <span class="mi">0xfe296</span>
+     <span class="err">0</span><span class="nl">xfe0fc:</span> <span class="nf">cmpl</span>   <span class="no">$0x2ff</span><span class="p">,(</span><span class="nv">%esp</span><span class="p">)</span>
+</pre></div>
+
+
+<p>其实基本看不出来什么。不过通过上部分的分析可以看出，BIOS 干的事情大概如下</p>
+<ol>
+<li>设置中断表。</li>
+<li>初始化各个段寄存器、各种设备。</li>
+<li>寻找可启动设备，装载 Boot Loader</li>
+</ol>
+<h2 id="part-2-the-boot-loader">Part 2: The Boot Loader</h2>
+<blockquote>
+<p>Exercise 3. Take a look at the lab tools guide, especially the section on GDB commands. Even if you&rsquo;re familiar with GDB, this includes some esoteric GDB commands that are useful for OS work.</p>
+<p>Set a breakpoint at address 0x7c00, which is where the boot sector will be loaded. Continue execution until that breakpoint. Trace through the code in boot/boot.S, using the source code and the disassembly file obj/boot/boot.asm to keep track of where you are. Also use the x/i command in GDB to disassemble sequences of instructions in the boot loader, and compare the original boot loader source code with both the disassembly in obj/boot/boot.asm and GDB.</p>
+<p>Trace into bootmain() in boot/main.c, and then into readsect(). Identify the exact assembly instructions that correspond to each of the statements in readsect(). Trace through the rest of readsect() and back out into bootmain(), and identify the begin and end of the for loop that reads the remaining sectors of the kernel from the disk. Find out what code will run when the loop is finished, set a breakpoint there, and continue to that breakpoint. Then step through the remainder of the boot loader.</p>
+</blockquote>
+<p><code>boot/boot.S</code> 是源代码，因此有一些需要预处理的宏，一些指令也被修改过（尤其是32位寄存器名字）。<code>obj/boot/boot.asm</code> 是反编译的结果，和 GDB 调试过程中的代码几乎一致。</p>
+<p>GDB 默认装载的 symbol file 是 <code>obj/kern/kernel</code>，因此无法直接在 <code>bootmain</code> 函数上设置断电，可以通过 <code>symbol-file</code> 指令重新装载符号文件。</p>
+<p><code>readseg</code> 被调用了三次，第一次将 ELF Header 装载到 0x10000，第二次装载了 kernel 的 text 段，offset 为 0x1000，size 为 0xefa0，内存地址为 0x100000。第三次装载了 data 段，offset 为 0x10000，size 为 0xa944，内存地址为 0x10f000。但根据检查，data 段内容全部为0，因此似乎不装载也可以。</p>
+<p>将全部数据装载完后，<code>bootmain</code> 函数将调用 0x10000c 处函数进入 kernel。</p>
+<ul>
+<li>
+<p>At what point does the processor start executing 32-bit code? What exactly causes the switch from 16- to 32-bit mode?</p>
+<p>回答：<code>boot.S</code> 第51行，<code>movl    %eax, %cr0</code>。</p>
+</li>
+<li>
+<p>What is the last instruction of the boot loader executed, and what is the first instruction of the kernel it just loaded?</p>
+<p>回答：<code>0x7d63 &lt;bootmain+88&gt;: call   *0x10018</code> 和 <code>0x10000c: movw   $0x1234,0x472</code></p>
+</li>
+<li>
+<p>Where is the first instruction of the kernel?</p>
+<p>回答：0x10000c</p>
+</li>
+<li>
+<p>How does the boot loader decide how many sectors it must read in order to fetch the entire kernel from disk? Where does it find this information?</p>
+<p>回答：从 <code>ELFHDR-&gt;e_phnum</code> 中获取。</p>
+</li>
+</ul>
+<h3 id="loading-the-kernel">Loading the Kernel</h3>
+<blockquote>
+<p>Exercise 4. Read about programming with pointers in C. The best reference for the C language is The C Programming Language by Brian Kernighan and Dennis Ritchie (known as &lsquo;K&amp;R&rsquo;). We recommend that students purchase this book (here is an Amazon Link) or find one of MIT&rsquo;s 7 copies.</p>
+<p>Read 5.1 (Pointers and Addresses) through 5.5 (Character Pointers and Functions) in K&amp;R. Then download the code for pointers.c, run it, and make sure you understand where all of the printed values come from. In particular, make sure you understand where the pointer addresses in lines 1 and 6 come from, how all the values in lines 2 through 4 get there, and why the values printed in line 5 are seemingly corrupted.</p>
+<p>There are other references on pointers in C (e.g., A tutorial by Ted Jensen that cites K&amp;R heavily), though not as strongly recommended.</p>
+<p>Warning: Unless you are already thoroughly versed in C, do not skip or even skim this reading exercise. If you do not really understand pointers in C, you will suffer untold pain and misery in subsequent labs, and then eventually come to understand them the hard way. Trust us; you don&rsquo;t want to find out what &ldquo;the hard way&rdquo; is.</p>
+</blockquote>
+<p>之前计算概论课程在指针上已经折腾的够多了，这次又折腾一次……主要的点就是指针类型的加减。</p>
+<p>下面讲的就是 ELF 格式，ELF 格式由 ELF Header、Program Headers、Section Headers、具体每一 Section 的数据几个部分组成。其中 ELF Header 必须是很重要的，Program Headers 记录了运行时需要装载到内存中的 Segments 的信息，而 Section Headers 的主要作用是 debug 与链接时重定位。</p>
+<p>另外，<code>readelf</code> 某些时候比 <code>objdump</code> 更好用。</p>
+<blockquote>
+<p>Exercise 5. Trace through the first few instructions of the boot loader again and identify the first instruction that would &ldquo;break&rdquo; or otherwise do the wrong thing if you were to get the boot loader&rsquo;s link address wrong. Then change the link address in boot/Makefrag to something wrong, run make clean, recompile the lab with make, and trace into the boot loader again to see what happens. Don&rsquo;t forget to change the link address back and make clean again afterward!</p>
+</blockquote>
+<p>修改 0x7C00 后（例如改成 0x7C10），不能正常运行了，第一个错误出在 <code>lgdt    gdtdesc</code>。原因是链接时 ld 将 boot.S 的第一行代码当做是 0x7C10，因此所有使用绝对定位的符号（如 <code>gdtdesc</code>、<code>protcseg</code> 以及后面 <code>bootmain</code> 函数）都向后移了 0x10 的距离。而实际装载时却将所有代码装到 0x7C00 的地址上，因此会出错。这里是典型的链接地址要与装载地址相同的例子。此外，这里还可能触发内存对齐，编译器可能会在第一行代码前插入一些 <code>nop</code> 操作，但不影响错误发生的原因。</p>
+<blockquote>
+<p>Exercise 6. We can examine memory using GDB&rsquo;s x command. The GDB manual has full details, but for now, it is enough to know that the command x/Nx ADDR prints N words of memory at ADDR. (Note that both &lsquo;x&rsquo;s in the command are lowercase.) Warning: The size of a word is not a universal standard. In GNU assembly, a word is two bytes (the &lsquo;w&rsquo; in xorw, which stands for word, means 2 bytes).</p>
+<p>Reset the machine (exit QEMU/GDB and start them again). Examine the 8 words of memory at 0x00100000 at the point the BIOS enters the boot loader, and then again at the point the boot loader enters the kernel. Why are they different? What is there at the second breakpoint? (You do not really need to use QEMU to answer this question. Just think.)</p>
+</blockquote>
+<p>不同的原因是 <code>bootmain</code> 函数将 kernel 的 text 段装载到了 0x100000，所以执行之后这部分内存内容会改变。kernel 装载后 0x100000 的内容应该是 <code>MULTIBOOT_HEADER_MAGIC</code> 即 0x1BADB002。</p>
+<h2 id="part-3-the-kernel">Part 3: The Kernel</h2>
+<h3 id="using-virtual-memory-to-work-around-position-dependence">Using virtual memory to work around position dependence</h3>
+<p>讲了 JOS 的虚存机制。由于还没有进入 Lab 2，现在的页表是完全手写的，在<code>kern/entrypgdir.c</code>。</p>
+<p>CR0 的最高位决定了是否开启分页机制，CR3 存放了页表目录的内存地址。</p>
+<blockquote>
+<p>Exercise 7. Use QEMU and GDB to trace into the JOS kernel and stop at the movl %eax, %cr0. Examine memory at 0x00100000 and at 0xf0100000. Now, single step over that instruction using the stepi GDB command. Again, examine memory at 0x00100000 and at 0xf0100000. Make sure you understand what just happened.</p>
+<p>What is the first instruction after the new mapping is established that would fail to work properly if the mapping weren&rsquo;t in place? Comment out the movl %eax, %cr0 in kern/entry.S, trace into it, and see if you were right.</p>
+</blockquote>
+<p><code>movl %eax, %cr0</code> 执行完后，0xF0100000 开始的内存立即被改变。然后 <code>mov  $relocated, %eax</code> 与 <code>jmp  *%eax</code> 使用寄存器跳转，直接寻址到 0xF010002F。如果分页没有成功开启，那么 <code>0xf010002f:  mov    $0x0,%ebp</code> 将会失败。</p>
+<h3 id="formatted-printing-to-the-console">Formatted Printing to the Console</h3>
+<blockquote>
+<p>Exercise 8. We have omitted a small fragment of code - the code necessary to print octal numbers using patterns of the form &ldquo;%o&rdquo;. Find and fill in this code fragment.</p>
+</blockquote>
+<p>这个最简单，只不过一开始我以为需要先输出一个0……</p>
+<ol>
+<li>
+<p>Explain the interface between printf.c and console.c. Specifically, what function does console.c export? How is this function used by printf.c?</p>
+<p>答：暴露了几个 init 函数与 <code>cputchar</code>、<code>getchar</code>、<code>iscons</code> 三个函数。<code>printf.c</code> 中使用了 <code>cputchar</code> 函数，它将 <code>cputchar</code> 包装后作为参数传递给 <code>vprintfmt</code>。</p>
+</li>
+<li>
+<p>Explain the following from console.c:</p>
+<div class="codehilite"><pre>if (crt_pos &gt;= CRT_SIZE) {
+        int i;
+        memcpy(crt_buf, crt_buf + CRT_COLS, (CRT_SIZE - CRT_COLS) * sizeof(uint16_t));
+        for (i = CRT_SIZE - CRT_COLS; i &lt; CRT_SIZE; i++)
+                crt_buf[i] = 0x0700 | &#39; &#39;;
+        crt_pos -= CRT_COLS;
+}
+</pre></div>
+
+
+<p>答：主要检测输出的字符位置是否超出了屏幕空间。如果超出，则将每一行上移一行，并将最后一行填充为空格。</p>
+</li>
+<li>
+<p>For the following questions you might wish to consult the notes for Lecture 2. These notes cover GCC&rsquo;s calling convention on the x86.</p>
+<p>Trace the execution of the following code step-by-step:</p>
+<div class="codehilite"><pre>int x = 1, y = 3, z = 4;
+cprintf(&quot;x %d, y %x, z %d\n&quot;, x, y, z);
+</pre></div>
+
+
+<ul>
+<li>
+<p>In the call to <code>cprintf()</code>, to what does <code>fmt</code> point? To what does <code>ap</code> point?</p>
+<p>答：<code>fmt</code> 指向 <code>"x %d, y %x, z %d\n"</code>，<code>ap</code> 指向</p>
+</li>
+<li>
+<p>List (in order of execution) each call to <code>cons_putc</code>, <code>va_arg</code>, and <code>vcprintf</code>. For <code>cons_putc</code>, list its argument as well. For <code>va_arg</code>, list what <code>ap</code> points to before and after the call. For <code>vcprintf</code> list the values of its two arguments.</p>
+<p>答：由于 <code>va_arg</code> 无法下断点，因此是通过其他方法得出的。</p>
+<div class="codehilite"><pre>cprintf (fmt=0xf01017f2 &quot;x %d, y %x, z %d\n&quot;)
+cons_putc (c=120)
+cons_putc (c=32)
+va_arg(0xf0116fe4 &quot;\001&quot;, int)
+cons_putc (c=49)
+cons_putc (c=44)
+cons_putc (c=32)
+cons_putc (c=121)
+cons_putc (c=32)
+va_arg(0xf0116fe8 &quot;\003&quot;, unsigned int)
+cons_putc (c=51)
+cons_putc (c=44)
+cons_putc (c=32)
+cons_putc (c=122)
+cons_putc (c=32)
+va_arg(0xf0116fec &quot;\004&quot;, int)
+cons_putc (c=52)
+cons_putc (c=10)
+</pre></div>
+
+
+</li>
+</ul>
+</li>
+<li>
+<p>Run the following code.</p>
+<div class="codehilite"><pre>unsigned int i = 0x00646c72;
+cprintf(&quot;H%x Wo%s&quot;, 57616, &amp;i);
+</pre></div>
+
+
+<p>What is the output? Explain how this output is arrived at in the step-by-step manner of the previous exercise. Here&rsquo;s an ASCII table that maps bytes to characters.</p>
+<p>The output depends on that fact that the x86 is little-endian. If the x86 were instead big-endian what would you set i to in order to yield the same output? Would you need to change 57616 to a different value?</p>
+<p>答：输出是「He110 World」。因为57616的16进制表示是 <code>e110</code>，而
+<code>"rld"</code> 字符串在内存中存放的是 <code>0x72 0x6c 0x64 0x00</code>。由于 x86 是小端序，因此 0x00646c72 正好可以打印出 rld。如果换成大端序的电脑就要换为 0x726c6400。57616与端序无关，不用更改。</p>
+</li>
+<li>
+<p>In the following code, what is going to be printed after &lsquo;y=&rsquo;? (note: the answer is not a specific value.) Why does this happen?</p>
+<div class="codehilite"><pre>cprintf(&quot;x=%d y=%d&quot;, 3);
+</pre></div>
+
+
+<p>答：我的输出结果为 y=1604。原因是 <code>va_arg</code> 会按照类型依次去读栈上的内容，3在栈上的地址为 0xf0116fe8，而 0xf0116fec 的内容为 0x00000644，即1604。</p>
+</li>
+<li>
+<p>Let&rsquo;s say that GCC changed its calling convention so that it pushed arguments on the stack in declaration order, so that the last argument is pushed last. How would you have to change cprintf or its interface so that it would still be possible to pass it a variable number of arguments?</p>
+<p>答：由于需要压栈的顺序改变了，除了 <code>va_arg</code> 需要将加法改为减法外，函数首先必须要知道 <code>fmt</code>的地址，因此必须将 <code>fmt</code> 字符串作为最后一个参数。</p>
+</li>
+</ol>
+<h3 id="the-stack">The Stack</h3>
+<blockquote>
+<p>Exercise 9. Determine where the kernel initializes its stack, and exactly where in memory its stack is located. How does the kernel reserve space for its stack? And at which &ldquo;end&rdquo; of this reserved area is the stack pointer initialized to point to?</p>
+</blockquote>
+<p>内核初始化栈在 <code>entry.S</code> 的第77行 <code>movl   $(bootstacktop),%esp</code>。其中 <code>bootstacktop</code> 在 0xf0117000，<code>bootstack</code> 在 0xf010f000，大小为 0x8000 即 32KB。<code>esp</code> 被初始化为 <code>bootstacktop</code>。</p>
+<blockquote>
+<p>Exercise 10. To become familiar with the C calling conventions on the x86, find the address of the test_backtrace function in obj/kern/kernel.asm, set a breakpoint there, and examine what happens each time it gets called after the kernel starts. How many 32-bit words does each recursive nesting level of test_backtrace push on the stack, and what are those words?</p>
+<p>Note that, for this exercise to work properly, you should be using the patched version of QEMU available on the tools page or on Athena. Otherwise, you&rsquo;ll have to manually translate all breakpoint and memory addresses to linear addresses.</p>
+</blockquote>
+<p>每次打印 %esp 可知，%esp 每次相差 0x20 = 32 Bytes。这32 Bytes 由以下几部分构成。</p>
+<ol>
+<li>call/ret 将 %eip 压栈，4 Bytes。</li>
+<li><code>f0100040:   55                      push   %ebp</code>，4 Bytes。</li>
+<li><code>f0100043:   53                      push   %ebx</code>，4 Bytes。</li>
+<li><code>f0100044:   83 ec 14                sub    $0x14,%esp</code> 这部分是用来传参的，20 Bytes。</li>
+</ol>
+<blockquote>
+<p>Exercise 11. Implement the backtrace function as specified above. Use the same format as in the example, since otherwise the grading script will be confused. When you think you have it working right, run make grade to see if its output conforms to what our grading script expects, and fix it if it doesn&rsquo;t. After you have handed in your Lab 1 code, you are welcome to change the output format of the backtrace function any way you like.</p>
+<p>If you use read_ebp(), note that GCC may generate &ldquo;optimized&rdquo; code that calls read_ebp() before mon_backtrace()&rsquo;s function prologue, which results in an incomplete stack trace (the stack frame of the most recent function call is missing). While we have tried to disable optimizations that cause this reordering, you may want to examine the assembly of mon_backtrace() and make sure the call to read_ebp() is happening after the function prologue.</p>
+</blockquote></article></body></html>
