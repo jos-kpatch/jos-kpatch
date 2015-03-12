@@ -239,6 +239,20 @@ CR0 的最高位决定了是否开启分页机制，CR3 存放了页表目录的
 
 	答：由于需要压栈的顺序改变了，除了 `va_arg` 需要将加法改为减法外，函数首先必须要知道 `fmt`的地址，因此必须将 `fmt` 字符串作为最后一个参数。
 	
+> *Challenge* Enhance the console to allow text to be printed in different colors. The traditional way to do this is to make it interpret ANSI escape sequences embedded in the text strings printed to the console, but you may use any mechanism you like. There is plenty of information on the 6.828 reference page and elsewhere on the web on programming the VGA display hardware. If you're feeling really adventurous, you could try switching the VGA hardware into a graphics mode and making the console draw text onto the graphical frame buffer.
+
+先看 `cons_putc` 函数的代码，发现它调用了 `serial_putc`、`lpt_putc`、`cga_putc` 三个函数，分别对应串口输出、并口输出和 CGA/VGA 输出。其中前两种是 port-mapped IO，最后一种是 memory-mapped IO。通过实验可以发现，我们在终端里的字符是通过串口输出的，而模拟器界面的字符是通过 CGA 输出的，并口输出暂时没有作用。
+
+由于我们用的终端均支持 ANSI escape color，因此如果我们实现的 JOS 也用 ANSI escape color 的话，在终端这部分的输出就可以自然地实现，因此考虑使用 ANSI escape color。
+
+ANSI escape color 用如下的字符串控制颜色 `\033[30;49m`，其中30是字符颜色，49是背景颜色。为此，需要在 `serial_putc` 里增加一个类似于自动机的机制。
+
+代码详见 `console.c`。
+
+![](lab1-1.png)
+
+![](lab1-2.png)
+	
 ### The Stack
 
 > Exercise 9. Determine where the kernel initializes its stack, and exactly where in memory its stack is located. How does the kernel reserve space for its stack? And at which "end" of this reserved area is the stack pointer initialized to point to?
@@ -249,15 +263,75 @@ CR0 的最高位决定了是否开启分页机制，CR3 存放了页表目录的
 >
 > Note that, for this exercise to work properly, you should be using the patched version of QEMU available on the tools page or on Athena. Otherwise, you'll have to manually translate all breakpoint and memory addresses to linear addresses.
 
-每次打印 %esp 可知，%esp 每次相差 0x20 = 32 Bytes。这32 Bytes 由以下几部分构成。
+每次打印 %esp 可知，%esp 每次相差 0x20 = 32 Bytes 即8个 words。这 32 Bytes 由以下几部分构成。
 
-1. call/ret 将 %eip 压栈，4 Bytes。
+1. `call/ret` 将 %eip 压栈，4 Bytes。
 2. `f0100040:	55                   	push   %ebp`，4 Bytes。
 3. `f0100043:	53                   	push   %ebx`，4 Bytes。
 4. `f0100044:	83 ec 14             	sub    $0x14,%esp` 这部分是用来传参的，20 Bytes。
+
+Backtrace 函数无法检测到当前函数的参数数量，原因是在编译后的 text 段本身就不包含除了任何符号信息。那么，能否从 stab 段得出函数原型呢？答案也是不可能，因为 stab 并没有提供函数原型的功能。根据 Google 可知，有一种称为 DWARF 的 debug 信息是包含函数原型的（可以通过 `objdump -W` 查看），而我们在编译时并没有加入 DWARF 信息。
 
 > Exercise 11. Implement the backtrace function as specified above. Use the same format as in the example, since otherwise the grading script will be confused. When you think you have it working right, run make grade to see if its output conforms to what our grading script expects, and fix it if it doesn't. After you have handed in your Lab 1 code, you are welcome to change the output format of the backtrace function any way you like.
 >
 > If you use read_ebp(), note that GCC may generate "optimized" code that calls read_ebp() before mon_backtrace()'s function prologue, which results in an incomplete stack trace (the stack frame of the most recent function call is missing). While we have tried to disable optimizations that cause this reordering, you may want to examine the assembly of mon_backtrace() and make sure the call to read_ebp() is happening after the function prologue.
 
+Backtrace 的到底长啥样在上面已经说了：打印每个 frame 的 ebp、eip 和前五个 arguments。题目也提示我们使用 `read_ebp()` 函数了，可以看出，`read_ebp()` 返回一个 `uint32_t` 类型。考虑到栈的结构如下
+
+				|      ...........      |
+				+-----------------------+
+				|      Argument #5      |
+				+-----------------------+ 
+				|      Argument #4      |
+				+-----------------------+ 
+				|      Argument #3      |
+				+-----------------------+ 
+				|      Argument #2      |
+				+-----------------------+ 
+				|      Argument #1      |
+				+-----------------------+ 
+				|      Return Addr      |
+				+-----------------------+ 
+				|        Old %ebp       |  <-- Current %ebp
+				+-----------------------+ 
+				|      ...........      |
+
+因此只需要打印当前 %ebp，然后再打印当前 %ebp 指向的内存地址后面的6个地址内容即可。最后令 `%ebp = *%ebp`。
+
+使用数组寻址的方式可以简化指针的操作。
+
+
+> Exercise 12. Modify your stack backtrace function to display, for each eip, the function name, source file name, and line number corresponding to that eip.
+>
+> In `debuginfo_eip`, where do `__STAB_*` come from? This question has a long answer; to help you to discover the answer, here are some things you might want to do:
+> 
+> - look in the file `kern/kernel.ld` for `__STAB_*`
+> - run `i386-jos-elf-objdump -h obj/kern/kernel`
+> - run `i386-jos-elf-objdump -G obj/kern/kernel`
+> - run `i386-jos-elf-gcc -pipe -nostdinc -O2 -fno-builtin -I. -MD -Wall -Wno-format -DJOS_KERNEL -gstabs -c -S kern/init.c`, and look at init.s.
+> - see if the bootloader loads the symbol table in memory as part of loading the kernel binary.
+>
+> Complete the implementation of debuginfo_eip by inserting the call to stab_binsearch to find the line number for an address.
+>
+> Add a backtrace command to the kernel monitor, and extend your implementation of mon_backtrace to call debuginfo_eip and print a line for each stack frame of the form:
+>
+>     K> backtrace
+>     Stack backtrace:
+>       ebp f010ff78  eip f01008ae  args 00000001 f010ff8c 00000000 f0110580 00000000
+>              kern/monitor.c:143: monitor+106
+>       ebp f010ffd8  eip f0100193  args 00000000 00001aac 00000660 00000000 00000000
+>              kern/init.c:49: i386_init+59
+>       ebp f010fff8  eip f010003d  args 00000000 00000000 0000ffff 10cf9a00 0000ffff
+>              kern/entry.S:70: <unknown>+0
+>     K> 
+>
+> Each line gives the file name and line within that file of the stack frame's eip, followed by the name of the function and the offset of the eip from the first instruction of the function (e.g., `monitor+106` means the return eip is 106 bytes past the beginning of monitor).
+>
+> Be sure to print the file and function names on a separate line, to avoid confusing the grading script.
+>
+> Tip: printf format strings provide an easy, albeit obscure, way to print non-null-terminated strings like those in STABS tables.	`printf("%.*s", length, string)` prints at most length characters of string. Take a look at the printf man page to find out why this works.
+>
+> You may find that some functions are missing from the backtrace. For example, you will probably see a call to `monitor()` but not to `runcmd()`. This is because the compiler in-lines some function calls. Other optimizations may cause you to see unexpected line numbers. If you get rid of the `-O2` from GNUMakefile, the backtraces may make more sense (but your kernel will run more slowly).
+
+这一题是比较难的，因为要程序自己去读 stab 段。查看 `kdebug.c` 文件，发现诀窍是在链接时手动加上四个符号 `__STAB_BEGIN__`、`__STAB_END__`、`__STABSTR_BEGIN__`、`__STABSTR_BEGIN__` 用来定位 stab 和 stabstr 段的开始和结束（从来没想过可以这样做）。由于已经提供 `stab_binsearch` 函数，因此根据内存地址来找行号还是比较容易的，依葫芦画瓢即可。
 
