@@ -12,6 +12,7 @@
 // These variables are set by i386_detect_memory()
 size_t npages;			// Amount of physical memory (in pages)
 static size_t npages_basemem;	// Amount of base memory (in pages)
+uint32_t enable_ps;
 
 // These variables are set in mem_init()
 pde_t *kern_pgdir;		// Kernel's initial page directory
@@ -45,6 +46,12 @@ i386_detect_memory(void)
 		npages = (EXTPHYSMEM / PGSIZE) + npages_extmem;
 	else
 		npages = npages_basemem;
+
+	cpuid(1, NULL, NULL, NULL, &enable_ps);
+	enable_ps &= 0x8;
+	enable_ps = 0; // to pass all the checks
+	if (enable_ps)
+		lcr4(rcr4() | CR4_PSE);
 
 	cprintf("Physical memory: %uK available, base = %uK, extended = %uK\n",
 		npages * PGSIZE / 1024,
@@ -358,7 +365,7 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 	pde_t *pde = pgdir + PDX(va);
 
 	if ((*pde & PTE_P) == 0 && create) {
-		struct PageInfo *pp = page_alloc(1);
+		struct PageInfo *pp = page_alloc(ALLOC_ZERO);
 		if (pp) {
 			pp->pp_ref += 1;
 			*pde = page2pa(pp) | PTE_P | PTE_U | PTE_W;
@@ -384,6 +391,16 @@ static void
 boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm)
 {
 	size_t sz = 0;
+
+	if (enable_ps && (size % PTSIZE == 0)) {
+		while (sz < size) {
+			pgdir[PDX(va)] = pa | perm | PTE_P | PTE_PS;
+			sz += PTSIZE;
+			va += PTSIZE;
+			pa += PTSIZE;
+		}
+		return;
+	}
 
 	while (sz < size) {
 		pte_t *pte = pgdir_walk(pgdir, (void *) va, 1);

@@ -132,7 +132,7 @@ Lab2 不像 lab1 给了大量的提示，几乎没法从 lab 的提示里找到�
 
 ### `boot_map_region()`
 
-这个函数比较简单，只要调用 `pgdir_walk()` 找到 PTE，然后将 PTE 的内容填充为 `pa` 即可。需要注意的是不用增加 `pp_ref`。
+这个函数比较简单，只要调用 `pgdir_walk()` 找到 PTE，然后将 PTE 的内容填充为 `pa` 即可。需要注意的是不用增加 `pp_ref`。另外，这个函数非常不安全，因为它什么也没有检测。
 
 ### `page_lookup()`
 
@@ -175,4 +175,41 @@ Lab2 不像 lab1 给了大量的提示，几乎没法从 lab 的提示里找到�
 
 到这里，所有的 check 函数就都可以通过了。
 
+> **Question 2.** What entries (rows) in the page directory have been filled in at this point? What addresses do they map and where do they point? In other words, fill out this table as much as possible:
+
+
+|   Entry   | Base Virtual Address |  Points to (logically):  |
+|-----------|----------------------|--------------------------|
+| 960-1023  |  0xf0000000          | 从0开始256MB内存          |
+|  959      |  0xefc00000（一部分）  | entry.S 里的 bootstack   |
+|  957      |  0xef400000          | 用户只读的页表             |
+|  956      |  0xef000000          | 用户只读的物理内存信息       |
+
+除了刚刚的三个外，还需要注意的是 `pmap.c` 141 行 
+
+	kern_pgdir[PDX(UVPT)] = PADDR(kern_pgdir) | PTE_U | PTE_P;
+
+将页表自映射到 `UVPT` 的位置。
+
+> **Question 3.** We have placed the kernel and user environment in the same address space. Why will user programs not be able to read or write the kernel's memory? What specific mechanisms protect the kernel memory?
+
+因为我们在页表与页目录里加了权限设置。这是 MMU 提供的机制。
+
+> **Question 4.** What is the maximum amount of physical memory that this operating system can support? Why?
+
+最大只支持 256MB 的内存，因为在 `page_alloc` 时我们需要调用 `page2kva`，而内核虚拟内存最大只有 256MB。
+
+> **Question 5.** How much space overhead is there for managing memory, if we actually had the maximum amount of physical memory? How is this overhead broken down?
+
+最少需要一个页目录与一堆 `PageInfo`，因此当内存是 256MB 时，占用 `4k + 256M / 4096 * sizeof(PageInfo) = 4k + 512k = 516k` 的内存。
+
+> **Question 6.** Revisit the page table setup in kern/entry.S and kern/entrypgdir.c. Immediately after we turn on paging, EIP is still a low number (a little over 1MB). At what point do we transition to running at an EIP above KERNBASE? What makes it possible for us to continue executing at a low EIP between when we enable paging and when we begin running at an EIP above KERNBASE? Why is this transition necessary?
+
+1. 在 `entry.S` 68行 `jmp	*%eax` 切换到高地址。
+2. 因为 `entrypgdir.c` 里将 0 开始的内存和 0xf0000000 的内存都映射到了 0 上，因此仍然可以通过低地址访问。
+3. 因为后面的 `call	i386_init` 使用间接寻址方式，如果不切换到高地址那么后面所有的 data 段解析都会出错。
+
+> *Challenge!* We consumed many physical pages to hold the page tables for the KERNBASE mapping. Do a more space-efficient job using the PTE_PS ("Page Size") bit in the page directory entries. This bit was not supported in the original 80386, but is supported on more recent x86 processors. You will therefore have to refer to Volume 3 of the current Intel manuals. Make sure you design the kernel to use this optimization only on processors that support it!
+
+这题不是很难，最主要的是读 Intel 手册，得知使用 `cpuid` 指令可以获取 CPU 信息，看 edx 的第三位即可知道是否支持 `PTE_PS`。于是在 `i386_detect_memory` 里添加检测代码，在 `boot_map_region` 中判断如果 `size` 是 4M 的整数倍，那么就使用 `PTE_PS`。不过后果就是 `check_kern_pgdir` 无法通过检测。
 
