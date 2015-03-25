@@ -9,7 +9,7 @@ author: Leedy
 
 ## Part 1: Physical Page Management
 
-> Exercise 1. In the file `kern/pmap.c`, you must implement code for the following functions (probably in the order given).
+> **Exercise 1.** In the file `kern/pmap.c`, you must implement code for the following functions (probably in the order given).
 >
 > `boot_alloc()`
 > `mem_init()` (only up to the call to `check_page_free_list(1)`)
@@ -72,7 +72,107 @@ Lab2 不像 lab1 给了大量的提示，几乎没法从 lab 的提示里找到�
 
 ## Part 2: Virtual Memory
 
+> **Exercise 2.** Look at chapters 5 and 6 of the Intel 80386 Reference Manual, if you haven't done so already. Read the sections about page translation and page-based protection closely (5.2 and 6.4). We recommend that you also skim the sections about segmentation; while JOS uses paging for virtual memory and protection, segment translation and segment-based protection cannot be disabled on the x86, so you will need a basic understanding of it.
 
+讲的基本都是操统课上讲过的。反倒是下面的寻址方式的图比较直观。
 
+### Virtual, Linear, and Physical Addresses
+
+	           Selector  +--------------+         +-----------+
+	          ---------->|              |         |           |
+	                     | Segmentation |         |  Paging   |
+	Software             |              |-------->|           |---------->  RAM
+	            Offset   |  Mechanism   |         | Mechanism |
+	          ---------->|              |         |           |
+	                     +--------------+         +-----------+
+	            Virtual                   Linear                Physical
+
+> **Exercise 3.** While GDB can only access QEMU's memory by virtual address, it's often useful to be able to inspect physical memory while setting up virtual memory. Review the QEMU monitor commands from the lab tools guide, especially the xp command, which lets you inspect physical memory. To access the QEMU monitor, press Ctrl-a c in the terminal (the same binding returns to the serial console).
+>
+> Use the xp command in the QEMU monitor and the x command in GDB to inspect memory at corresponding physical and virtual addresses and make sure you see the same data.
+>
+> Our patched version of QEMU provides an info pg command that may also prove useful: it shows a compact but detailed representation of the current page tables, including all mapped memory ranges, permissions, and flags. Stock QEMU also provides an info mem command that shows an overview of which ranges of virtual memory are mapped and with what permissions.
+
+我用的是仓库安装的 QEMU，因此只能使用 `info mem` 来查看页表。
+
+下面讨论了虚拟内存和物理内存的在内核中的访问。由于 MMU 已经打开，所以内核也无法直接访问物理地址，只能通过 0xf0000000 以上的虚拟地址来访问。这也是 JOS 只支持 256MB 的原因。
+ 
+> **Question 1.** that the following JOS kernel code is correct, what type should variable `x` have, `uintptr_t` or `physaddr_t`?
+>
+> 		mystery_t x;
+> 		char* value = return_a_pointer();
+> 		*value = 10;
+> 		x = (mystery_t) value;
+
+由于这里 dereference 了 `value`，所以显然是虚拟内存指针，即 `uintptr_t`。
+
+### Reference counting
+
+这一段讲了 `struct PageInfo` 中引用计数的重要性。
+
+### Page Table Management
+
+> **Exercise 4.** In the file `kern/pmap.c`, you must implement code for the following functions.
+>
+>		pgdir_walk()
+>		boot_map_region()
+>		page_lookup()
+>		page_remove()
+>		page_insert()
+>
+> `check_page()`, called from `mem_init()`, tests your page table management routines. You should make sure it reports success before proceeding.
+
+### `pgdir_walk()`
+
+这个函数其实是最重要的，因为其他几个函数都必须先找到 PTE 才能进一步操作。
+
+要想找到一个 va 对应的 PTE，首先必须要找到 PDE。注意 `pgdir` 指向第一个 PDE，因此 va 对应的 PDE 是 `pgdir + PDX(va)` 而不是 `pgdir[PDX(va)]`。
+
+找到 PDE 后，可能对应的页表不存在，如果 `create` 为1，则调用 `page_alloc(1)` 创建页表、用 `page2pa` 获取新分配的页的地址。另外，由于页表里存放的地址是物理地址，因此需要用 `KADDR` 转成内核虚拟地址来返回。
+
+### `boot_map_region()`
+
+这个函数比较简单，只要调用 `pgdir_walk()` 找到 PTE，然后将 PTE 的内容填充为 `pa` 即可。需要注意的是不用增加 `pp_ref`。
+
+### `page_lookup()`
+
+与上面相似，先找到 PTE，然后取出 `pa`，然后用 `pa2page` 即可。容易出错的地方是 `pte` 可能为 `NULL`，所以直接 dereference 可能会出错。
+
+### `page_remove()`
+
+提示说的非常清楚
+
+1. 用 `page_lookup` 取出 page，顺便还把 PTE 给取出来了。
+2. 用 `page_decref` 减 `pp_ref`、调用 `page_free`。
+3. 将 PTE 清空。
+4. 调用 `tlb_invalidate` 。
+
+### `page_insert()`
+
+前面写了那么多之后，其实这里就有好多种写法了，例如可以直接调用 `page_lookup` 而不是 `pgdir_walk` + `page_remove`，不过如果页表不存在的话还需要调用 `pgdir_walk` 创建……
+
+不过这里有个坑，就是如果将一个已经 map 过的 page 再次 map 到相同的地址就会出错，原因是 `page_remove()` 时把这页释放掉了，于是768行左右的 `assert(!page_alloc(0))` 就报错。最简单的解决方法是将 `pp->pp_ref += 1` 移动到 `page_remove` 之上。
+
+## Part 3: Kernel Address Space
+
+第三部分就是实现 `memlayout.h` 里的设计，主要用到的函数是上一部分写的 `boot_map_region()`。
+
+### Permissions and Fault Isolation
+
+`ULIM` 以上是 Kernel RW 的，`[UTOP,ULIM)` 是 User R- 的，`UTOP` 以下是 User RW 的。
+
+### Initializing the Kernel Address Space
+
+> **Exercise 5.** Fill in the missing code in `mem_init()` after the call to `check_page()`.
+>
+> Your code should now pass the `check_kern_pgdir()` and `check_page_installed_pgdir()` checks.
+
+这个 exercise 就是写几个 `boot_map_region`，但要弄清楚虚拟地址、物理地址、权限三个东西。
+
+1. Map 'pages' read-only by the user at linear address UPAGES. 由于 pages itself 本身就在 `ULIM` 之上，因此只需要 map 到 `UPAGES` 即可。要注意的是 `UPAGES` 是虚拟地址，物理地址是 `PADDR(pages)`。
+2. Use the physical memory that 'bootstack' refers to as the kernel stack. 注意看注释，这段内存的开始地址是 `PADDR(bootstack)`，需要 map 到 `KSTACKTOP - KSTKSIZE` 处。
+3. Map all of physical memory at KERNBASE. 这里需要将从 0 开始 256MB 内存全部 map 到 `KERNBASE` 处。
+
+到这里，所有的 check 函数就都可以通过了。
 
 
