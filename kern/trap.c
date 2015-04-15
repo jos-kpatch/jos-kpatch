@@ -63,8 +63,14 @@ void
 trap_init(void)
 {
 	extern struct Segdesc gdt[];
+	extern uint32_t trap_vectors[];
+	int i;
 
 	// LAB 3: Your code here.
+	for (i = 0; i < 20; i++)
+		SETGATE(idt[i], 0, GD_KT, trap_vectors[i], 0);
+	SETGATE(idt[T_BRKPT], 0, GD_KT, trap_vectors[T_BRKPT], 3);
+	SETGATE(idt[T_SYSCALL], 0, GD_KT, trap_vectors[20], 3);
 
 	// Per-CPU setup 
 	trap_init_percpu();
@@ -143,6 +149,17 @@ trap_dispatch(struct Trapframe *tf)
 {
 	// Handle processor exceptions.
 	// LAB 3: Your code here.
+	switch (tf->tf_trapno) {
+	case T_PGFLT:
+		return page_fault_handler(tf);
+	case T_BRKPT:
+		assert(user_mem_check(curenv, (void *) 0xeebfe008, 1, PTE_U) < 0);
+		return monitor(tf);
+	case T_SYSCALL:
+		tf->tf_regs.reg_eax = syscall(tf->tf_regs.reg_eax, tf->tf_regs.reg_edx, tf->tf_regs.reg_ecx, 
+					      tf->tf_regs.reg_ebx, tf->tf_regs.reg_edi, tf->tf_regs.reg_esi);
+		return;
+	}
 
 	// Unexpected trap: The user process or the kernel has a bug.
 	print_trapframe(tf);
@@ -204,6 +221,9 @@ page_fault_handler(struct Trapframe *tf)
 	// Handle kernel-mode page faults.
 
 	// LAB 3: Your code here.
+	if ((tf->tf_cs & 3) == 0)
+		panic("[%08x] kernel fault va %08x ip %08x\n",
+			curenv->env_id, fault_va, tf->tf_eip);
 
 	// We've already handled kernel-mode exceptions, so if we get here,
 	// the page fault happened in user mode.
