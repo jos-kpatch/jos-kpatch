@@ -152,8 +152,8 @@ trap_dispatch(struct Trapframe *tf)
 	switch (tf->tf_trapno) {
 	case T_PGFLT:
 		return page_fault_handler(tf);
+	case T_DEBUG:
 	case T_BRKPT:
-		assert(user_mem_check(curenv, (void *) 0xeebfe008, 1, PTE_U) < 0);
 		return monitor(tf);
 	case T_SYSCALL:
 		tf->tf_regs.reg_eax = syscall(tf->tf_regs.reg_eax, tf->tf_regs.reg_edx, tf->tf_regs.reg_ecx, 
