@@ -158,14 +158,43 @@ cga_init(void)
 	crt_pos = pos;
 }
 
-
+static int
+ansi_to_cga[] = { 0, 4, 2, 6, 1, 5, 3, 7 };
 
 static void
 cga_putc(int c)
 {
+	static int lch = 0, fg = 7, bg = 0, color = 0x0700;
+	int ch = c & 0xFF;
+
+	if (ch == '\033' || (lch == '\033' && ch == '[') || (lch == '_' && ch == ';')) {
+		lch = ch;
+		return;
+	} else if ((lch == '[' || lch == ';') && (ch == '0' || ch == '3' || ch == '4')) {
+		if (ch == '0') { // reset
+			fg = 7;
+			bg = 0;
+			lch = '_';
+		} else
+			lch = ch;
+		return;
+	} else if ((lch == '3' || lch == '4') && (ch - '0') >= 0 && (ch - '0') <= 7) {
+		if (lch == '3')
+			fg = ansi_to_cga[ch - '0'];
+		else
+			bg = ansi_to_cga[ch - '0'];
+		lch = '_';
+		return;
+	} else if (lch == '_' && ch == 'm') {
+		color = (fg << 8) + (bg << 12);
+		return;
+	} else {
+		lch = 0;
+	}
+
 	// if no attribute given, then use black on white
 	if (!(c & ~0xFF))
-		c |= 0x0700;
+		c |= color;
 
 	switch (c & 0xff) {
 	case '\b':
