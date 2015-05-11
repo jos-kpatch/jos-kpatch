@@ -14,9 +14,9 @@
 static void
 pgfault(struct UTrapframe *utf)
 {
-	void *addr = (void *) utf->utf_fault_va;
+	void *addr = (void *) ROUNDDOWN(utf->utf_fault_va, PGSIZE);
 	uint32_t err = utf->utf_err;
-	int r;
+	int r, perm = uvpt[PGNUM(addr)] & PTE_SYSCALL;
 
 	// Check that the faulting access was (1) a write, and (2) to a
 	// copy-on-write page.  If not, panic.
@@ -25,6 +25,10 @@ pgfault(struct UTrapframe *utf)
 	//   (see <inc/memlayout.h>).
 
 	// LAB 4: Your code here.
+	if ((err & FEC_WR) == 0)
+		panic("pgfault: not a write access");
+	if ((perm & PTE_COW) == 0)
+		panic("pgfault: not a copy-on-write page");
 
 	// Allocate a new page, map it at a temporary location (PFTEMP),
 	// copy the data from the old page to the new page, then move the new
@@ -33,8 +37,18 @@ pgfault(struct UTrapframe *utf)
 	//   You should make three system calls.
 
 	// LAB 4: Your code here.
+	perm = (perm & ~PTE_COW) | PTE_W;
 
-	panic("pgfault not implemented");
+	if ((r = sys_page_alloc(0, PFTEMP, perm) < 0))
+		panic("sys_page_alloc: %e", r);
+
+	memcpy(PFTEMP, addr, PGSIZE);
+
+	if ((r = sys_page_map(0, PFTEMP, 0, addr, perm) < 0))
+		panic("sys_page_map: %e", r);
+
+	if ((r = sys_page_unmap(0, PFTEMP) < 0))
+		panic("sys_page_unmap: %e", r);
 }
 
 //
@@ -51,11 +65,17 @@ pgfault(struct UTrapframe *utf)
 static int
 duppage(envid_t envid, unsigned pn)
 {
-	int r;
+	int r, perm = uvpt[pn] & PTE_SYSCALL;
+	void *va = (void *) (pn * PGSIZE);
 
 	// LAB 4: Your code here.
-	panic("duppage not implemented");
-	return 0;
+	if (perm & (PTE_COW | PTE_W)) {
+		perm = (perm & ~PTE_W) | PTE_COW;
+		if ((r = sys_page_map(0, va, envid, va, perm) < 0))
+			return r;
+		return sys_page_map(0, va, 0, va, perm);
+	}
+	return sys_page_map(0, va, envid, va, perm);
 }
 
 //
@@ -78,7 +98,36 @@ envid_t
 fork(void)
 {
 	// LAB 4: Your code here.
-	panic("fork not implemented");
+	int r, envid;
+	unsigned i, j;
+
+	set_pgfault_handler(pgfault);
+
+	if ((envid = sys_exofork()) < 0)
+		panic("sys_exofork: %e", envid);
+
+	if (envid == 0) {
+		thisenv = &envs[ENVX(sys_getenvid())];
+		return 0;
+	}
+
+	// copy upto USTACKTOP
+	for (i = 0; i < PDX(ROUNDUP(USTACKTOP, PTSIZE)); i++)
+		if (uvpd[i] & PTE_P)
+			for (j = i * NPTENTRIES; j < (i + 1) * NPTENTRIES && j < PGNUM(ROUNDUP(USTACKTOP, PGSIZE)); j++)
+				if (uvpt[j] & PTE_P)
+					if ((r = duppage(envid, j) < 0))
+						panic("duppage: %e", r);
+
+	// setup the child's exception stack from the parent
+	if ((r = sys_page_alloc(envid, (void *) (UXSTACKTOP - PGSIZE), PTE_P | PTE_U | PTE_W)) < 0)
+		panic("sys_page_alloc: %e", r);
+	sys_env_set_pgfault_upcall(envid, thisenv->env_pgfault_upcall);
+
+	if ((r = sys_env_set_status(envid, ENV_RUNNABLE) < 0))
+		panic("sys_env_set_status: %e", r);
+
+	return envid;
 }
 
 // Challenge!

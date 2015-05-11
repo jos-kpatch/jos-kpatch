@@ -273,7 +273,12 @@ mem_init_mp(void)
 	//     Permissions: kernel RW, user NONE
 	//
 	// LAB 4: Your code here:
+	int i = 0;
 
+	for (; i < NCPU; i++) {
+		boot_map_region(kern_pgdir, KSTACKTOP - i * (KSTKSIZE + KSTKGAP) - KSTKSIZE,
+				KSTKSIZE, PADDR(percpu_kstacks[i]), PTE_W);
+	}
 }
 
 // --------------------------------------------------------------
@@ -317,6 +322,9 @@ page_init(void)
 
 	// Mark physical page 0 as in use.
 	pages[0].pp_ref = 1;
+
+	// Mark the physical page at MPENTRY_PADDR as in use.
+	pages[PGNUM(MPENTRY_PADDR)].pp_ref = 1;
 
 	// [IOPHYSMEM, EXTPHYSMEM) must never be allocated.
 	// Kernel lives in [EXTPHYSMEM, PADDR(boot_alloc(0))).
@@ -597,7 +605,12 @@ mmio_map_region(physaddr_t pa, size_t size)
 	// Hint: The staff solution uses boot_map_region.
 	//
 	// Your code here:
-	panic("mmio_map_region not implemented");
+	size = ROUNDUP(size, PGSIZE);
+	if (base + size >= MMIOLIM)
+		panic("not enough io memory");
+	boot_map_region(kern_pgdir, base, size, pa, PTE_W | PTE_PCD | PTE_PWT);
+	base += size;
+	return (void *) base - size;
 }
 
 static uintptr_t user_mem_check_addr;
