@@ -69,7 +69,7 @@ duppage(envid_t envid, unsigned pn)
 	void *va = (void *) (pn * PGSIZE);
 
 	// LAB 4: Your code here.
-	if (perm & (PTE_COW | PTE_W)) {
+	if (!(perm & PTE_SHARE) && perm & (PTE_COW | PTE_W)) {
 		perm = (perm & ~PTE_W) | PTE_COW;
 		if ((r = sys_page_map(0, va, envid, va, perm) < 0))
 			return r;

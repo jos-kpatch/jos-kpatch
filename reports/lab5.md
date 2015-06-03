@@ -86,4 +86,36 @@ fs/fs.c 与 fs/serv.c 里有巨量的代码，然而并不要求我们写……�
 
 ## Spawning Processes
 
+> **Exercise 7.** spawn relies on the new syscall sys_env_set_trapframe to initialize the state of the newly created environment. Implement sys_env_set_trapframe in kernel/syscall.c (don't forget to dispatch the new system call in syscall()).
+>
+> Test your code by running the user/spawnhello program from kern/init.c, which will attempt to spawn /hello from the file system.
+>
+> Use make grade to test your code.
 
+添加一个新的系统调用，和以前干的事情一样。需要注意的是 make sure that user environments always run at code protection level 3 (CPL 3) with interrupts enabled. `tf_cs` 的低2位要都为1，`tf_flags` 的 `FL_IF` 位要为1。
+
+### Sharing library state across fork and spawn
+
+> **Exercise 8.** Change duppage in lib/fork.c to follow the new convention. If the page table entry has the PTE_SHARE bit set, just copy the mapping directly. (You should use PTE_SYSCALL, not 0xfff, to mask out the relevant bits from the page table entry. 0xfff picks up the accessed and dirty bits as well.)
+>
+> Likewise, implement copy_shared_pages in lib/spawn.c. It should loop through all page table entries in the current process (just like fork did), copying any page mappings that have the PTE_SHARE bit set into the child process.
+
+`duppage` 需要判断，如果 `perm & PTE_SHARE`，那么直接 map 不用考虑 COW。
+
+`copy_shared_pages` 和 `sfork` 类似。
+
+## The keyboard interface
+
+> **Exercise 9.** In your kern/trap.c, call kbd_intr to handle trap IRQ_OFFSET+IRQ_KBD and serial_intr to handle trap IRQ_OFFSET+IRQ_SERIAL.
+
+这个理论上很简单，但添加过后我却一直提示 read error: invalid parameter。在多处打 log 后发现了问题：syscall 里没有对 `sys_cgetc` 做分发。
+
+## The Shell
+
+> **Exercise 10.** The shell doesn't support I/O redirection. It would be nice to run sh < script instead of having to type in all the commands in the script by hand, as you did above. Add I/O redirection for < to user/sh.c.
+>
+> Test your implementation by typing sh <script into your shell
+>
+> Run make run-testshell to test your shell. testshell simply feeds the above commands (also found in fs/testshell.sh) into the shell and then checks that the output matches fs/testshell.key.
+
+本来以为这部分会很难（参考 ICS），结果发现却异常简单……直接将下面 '>' 的实现改一改就可以了。不过从这个 Lab 的代码也可以看出，JOS 本身是一个非常精妙的系统，我们写的代码只是它的十分之一不到，更重要的是读懂其他的代码。
