@@ -44,7 +44,7 @@ kpatch_patch_function(void *old, void *new)
 }
 
 int
-kpatch_patch_function_with_name(char *function_name, void *new)
+kpatch_patch_function_with_name(const char *function_name, void *new)
 {
 	const struct Stab *stab;
 	int function_namelen;

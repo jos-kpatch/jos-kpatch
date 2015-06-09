@@ -11,6 +11,7 @@
 #include <kern/syscall.h>
 #include <kern/console.h>
 #include <kern/sched.h>
+#include <kern/kpatch.h>
 
 // Print a string to the system console.
 // The string is exactly 'len' characters long.
@@ -405,6 +406,12 @@ sys_ipc_recv(void *dstva)
 	return 0;
 }
 
+static int
+sys_patch_function(const char *name, void *replacement)
+{
+	return 0;
+}
+
 // Dispatches to the correct kernel function, passing the arguments.
 int32_t
 syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t a5)
@@ -444,6 +451,8 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 		return sys_ipc_recv((void *) a1);
 	case SYS_env_set_trapframe:
 		return sys_env_set_trapframe((envid_t) a1, (struct Trapframe *) a2);
+	case SYS_patch_function:
+		return sys_patch_function((const char *) a1, (void *) a2);
 	default:
 		return -E_INVAL;
 	}

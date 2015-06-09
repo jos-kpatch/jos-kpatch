@@ -114,6 +114,11 @@ sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, int perm)
 int
 sys_ipc_recv(void *dstva)
 {
-	return syscall(SYS_ipc_recv, 1, (uint32_t)dstva, 0, 0, 0, 0);
+	return syscall(SYS_ipc_recv, 1, (uint32_t) dstva, 0, 0, 0, 0);
 }
 
+int
+sys_patch_function(const char *name, void *replacement)
+{
+	return syscall(SYS_patch_function, 1, (uint32_t) name, (uint32_t) replacement, 0, 0, 0);
+}
