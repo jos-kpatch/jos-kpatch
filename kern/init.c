@@ -91,7 +91,11 @@ i386_init(void)
 	assert(kpatch_patch_function(kpatch_test_func1, kpatch_test_func2) == 0);
 	assert(kpatch_test_func1() == 2);
 
-	monitor(0);
+	assert(kpatch_patch_function_with_name("kpatch_test_func1", 0) == 0);
+	assert(kpatch_patch_function_with_name("kpatch_test_func1", kpatch_test_func1) == 0);
+	assert(kpatch_patch_function_with_name("kpatch_test_func2", 0) == 0);
+	assert(kpatch_patch_function_with_name("kpatch_test_func3", 0) != 0);
+	assert(kpatch_test_func1() == 1);
 
 	// Schedule and run the first user environment!
 	sched_yield();
