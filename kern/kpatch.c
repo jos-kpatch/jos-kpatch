@@ -10,6 +10,8 @@ extern const struct Stab __STAB_END__[];	// End of stabs table
 extern const char __STABSTR_BEGIN__[];		// Beginning of string table
 extern const char __STABSTR_END__[];		// End of string table
 
+void *__fentry__;
+
 int
 kpatch_patch_function(void *old, void *new)
 {
