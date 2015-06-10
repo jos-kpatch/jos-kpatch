@@ -118,6 +118,12 @@ sys_ipc_recv(void *dstva)
 }
 
 int
+sys_load_code(void *dest, void *src, size_t len, void *entry)
+{
+	return syscall(SYS_load_code, 1, (uint32_t) dest, (uint32_t) src, (uint32_t) len, (uint32_t) entry, 0);
+}
+
+int
 sys_patch_function(const char *name, void *replacement)
 {
 	return syscall(SYS_patch_function, 1, (uint32_t) name, (uint32_t) replacement, 0, 0, 0);

@@ -58,3 +58,17 @@ kpatch_patch_function_with_name(const char *function_name, void *new)
 
 	return -E_NO_FUNCTION;
 }
+
+int
+kpatch_test_func1(void)
+{
+	cprintf("kpatch_test_func1 called\n");
+	return 1;
+}
+
+int
+kpatch_test_func2(void)
+{
+	cprintf("kpatch_test_func2 called\n");
+	return 2;
+}

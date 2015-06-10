@@ -30,12 +30,15 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/testpteshare \
 			$(OBJDIR)/user/testshell \
 			$(OBJDIR)/user/hello \
+			$(OBJDIR)/user/insmod \
+			$(OBJDIR)/user/kpatch \
 
 FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/lorem \
 			fs/script \
 			fs/testshell.key \
-			fs/testshell.sh
+			fs/testshell.sh \
+			$(OBJDIR)/modules/test.ko
 
 
 FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)

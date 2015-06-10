@@ -18,20 +18,6 @@
 #include <kern/kpatch.h>
 
 
-int
-kpatch_test_func1(void)
-{
-	cprintf("kpatch_test_func1 called\n");
-	return 1;
-}
-
-int
-kpatch_test_func2(void)
-{
-	cprintf("kpatch_test_func2 called\n");
-	return 2;
-}
-
 static void boot_aps(void);
 
 
@@ -85,17 +71,6 @@ i386_init(void)
 
 	// Should not be necessary - drains keyboard because interrupt has given up.
 	kbd_intr();
-
-	assert(kpatch_test_func1() == 1);
-	assert(kpatch_test_func2() == 2);
-	assert(kpatch_patch_function(kpatch_test_func1, kpatch_test_func2) == 0);
-	assert(kpatch_test_func1() == 2);
-
-	assert(kpatch_patch_function_with_name("kpatch_test_func1", 0) == 0);
-	assert(kpatch_patch_function_with_name("kpatch_test_func1", kpatch_test_func1) == 0);
-	assert(kpatch_patch_function_with_name("kpatch_test_func2", 0) == 0);
-	assert(kpatch_patch_function_with_name("kpatch_test_func3", 0) != 0);
-	assert(kpatch_test_func1() == 1);
 
 	// Schedule and run the first user environment!
 	sched_yield();

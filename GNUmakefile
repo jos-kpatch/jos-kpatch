@@ -122,6 +122,7 @@ all:
 
 KERN_CFLAGS := $(CFLAGS) -DJOS_KERNEL -gstabs
 USER_CFLAGS := $(CFLAGS) -DJOS_USER -gstabs
+MODULE_CFLAGS := $(CFLAGS) -DJOS_MODULE
 
 # Update .vars.X if variable X has changed since the last make run.
 #
@@ -140,6 +141,7 @@ include kern/Makefrag
 include lib/Makefrag
 include user/Makefrag
 include fs/Makefrag
+include modules/Makefrag
 
 
 CPUS ?= 1

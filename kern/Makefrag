@@ -39,7 +39,7 @@ KERN_SRCFILES +=	kern/mpentry.S \
 			kern/spinlock.c
 
 # Kpatch
-KERN_SRCFILES +=	kern/kpatch.c kern/kpatchentry.S
+KERN_SRCFILES +=	kern/kpatch.c kern/kpatchentry.S kern/module.c
 
 # Only build files if they exist.
 KERN_SRCFILES := $(wildcard $(KERN_SRCFILES))

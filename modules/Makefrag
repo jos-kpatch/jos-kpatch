@@ -1,0 +1,26 @@
+#
+# Makefile fragment for JOS modules.
+# This is NOT a complete makefile;
+# you must run GNU make in the top-level directory
+# where the GNUmakefile is located.
+#
+
+OBJDIRS += modules
+
+MODULE_LDFLAGS := $(LDFLAGS) -nostdlib --strip-all
+
+$(OBJDIR)/modules/symbolfile: $(OBJDIR)/kern/kernel
+	@mkdir -p $(@D)
+	$(V)cat $(OBJDIR)/kern/kernel.sym | awk '{print $$3 " = 0x" $$1 ";"}' > $@
+
+$(OBJDIR)/modules/%.o: modules/%.c $(OBJDIR)/.vars.MODULE_CFLAGS
+	@echo + cc $<
+	@mkdir -p $(@D)
+	$(V)$(CC) -nostdinc $(MODULE_CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/modules/%.ko: $(OBJDIR)/modules/%.o $(OBJDIR)/modules/symbolfile FORCE
+	@echo + ld $<
+	@mkdir -p $(@D)
+	$(V)$(LD) -R $(OBJDIR)/modules/symbolfile -e module_init \
+		-Ttext=0x`tail -n1 $(OBJDIR)/kern/kernel.sym | awk '{print $$1}'` \
+		-o $@ $(MODULE_LDFLAGS) $< $(GCC_LIB)
