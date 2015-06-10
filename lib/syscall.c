@@ -126,5 +126,11 @@ sys_load_code(void *dest, void *src, size_t len, void *entry)
 int
 sys_patch_function(const char *name, void *replacement)
 {
-	return syscall(SYS_patch_function, 1, (uint32_t) name, (uint32_t) replacement, 0, 0, 0);
+	return syscall(SYS_patch_function, 0, (uint32_t) name, (uint32_t) replacement, 0, 0, 0);
+}
+
+int
+sys_call_function(const char *name)
+{
+	return syscall(SYS_call_function, 0, (uint32_t) name, 0, 0, 0, 0);
 }

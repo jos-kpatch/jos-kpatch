@@ -2,6 +2,7 @@
 #include <inc/stdio.h>
 #include <inc/error.h>
 #include <inc/string.h>
+#include <kern/kpatch.h>
 
 #include <kern/kdebug.h>
 
@@ -31,11 +32,11 @@ kpatch_patch_function(void *old, void *new)
 		return -E_NOT_PATCHABLE;
 
 	if (new && old != new) { // patch!
-		cprintf("patching function %.*s with 0x%p\n", info.eip_fn_namelen, info.eip_fn_name, new);
+		cprintf(INFO_START "patch function %.*s with %p" INFO_END, info.eip_fn_namelen, info.eip_fn_name, new);
 		*old_as_char = 0xe9; // jmp
 		*((uint32_t *) (old_as_char + 1)) = new - (old + 5);
 	} else { // restore!
-		cprintf("restoring function %.*s with 0x%p\n", info.eip_fn_namelen, info.eip_fn_name, old);
+		cprintf(INFO_START "restore function %.*s with %p" INFO_END, info.eip_fn_namelen, info.eip_fn_name, old);
 		*old_as_char = 0x90; // jmp
 		*((uint32_t *) (old_as_char + 1)) = 0x90909090;
 	}
@@ -60,15 +61,34 @@ kpatch_patch_function_with_name(const char *function_name, void *new)
 }
 
 int
-kpatch_test_func1(void)
+kpatch_call_function_with_name(const char *function_name)
 {
-	cprintf("kpatch_test_func1 called\n");
+	const struct Stab *stab;
+	int function_namelen;
+
+
+	function_namelen = strlen(function_name);
+	for (stab = __STAB_BEGIN__; stab < __STAB_END__; stab++)
+		if (stab->n_type == N_FUN &&
+		    __STABSTR_BEGIN__[stab->n_strx + function_namelen] == ':' &&
+		    strncmp(function_name, __STABSTR_BEGIN__ + stab->n_strx, function_namelen) == 0) {
+			cprintf(INFO_START "call %s at %p" INFO_END, function_name, stab->n_value);
+			return ((int (*)(void)) (stab->n_value))();
+		}
+
+	return -E_NO_FUNCTION;
+}
+
+int
+kpatch_test1(void)
+{
+	cprintf("kpatch_test1 called\n");
 	return 1;
 }
 
 int
-kpatch_test_func2(void)
+kpatch_test2(void)
 {
-	cprintf("kpatch_test_func2 called\n");
+	cprintf("kpatch_test2 called\n");
 	return 2;
 }

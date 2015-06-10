@@ -32,6 +32,7 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/insmod \
 			$(OBJDIR)/user/kpatch \
+			$(OBJDIR)/user/kcall \
 
 FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/lorem \

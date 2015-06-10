@@ -59,6 +59,7 @@ int	sys_ipc_try_send(envid_t to_env, uint32_t value, void *pg, int perm);
 int	sys_ipc_recv(void *rcv_pg);
 int	sys_load_code(void *dest, void *src, size_t len, void *entry);
 int	sys_patch_function(const char *name, void *replacement);
+int	sys_call_function(const char *name);
 
 // This must be inlined.  Exercise for reader: why?
 static __inline envid_t __attribute__((always_inline))

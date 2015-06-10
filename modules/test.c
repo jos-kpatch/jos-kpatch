@@ -1,6 +1,6 @@
 #include <inc/stdio.h>
 
-extern int kpatch_test_func1(void);
+extern int kpatch_test1(void);
 
 void
 test2(void)
@@ -11,7 +11,7 @@ test2(void)
 int
 module_init(void)
 {
-	kpatch_test_func1();
+	kpatch_test1();
 	cprintf("test2 address: %p\n", test2);
 
 	return 0;

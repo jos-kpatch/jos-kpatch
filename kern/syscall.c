@@ -410,7 +410,7 @@ static int
 sys_load_code(void *dest, void *src, size_t len, void *entry)
 {
 	user_mem_assert(curenv, src, len, 0);
-	cprintf("load_address = %p, len = 0x%x, entry = %p\n", dest, len, entry);
+	cprintf(INFO_START "sys_load_code from %p to %p with len %d, entry %p" INFO_END, src, dest, len, entry);
 	memcpy(dest, src, len);
 
 	return ((int (*)(void)) (entry))();
@@ -422,6 +422,14 @@ sys_patch_function(const char *name, void *replacement)
 	user_mem_assert(curenv, name, strlen(name), 0);
 
 	return kpatch_patch_function_with_name(name, replacement);
+}
+
+static int
+sys_call_function(const char *name)
+{
+	user_mem_assert(curenv, name, strlen(name), 0);
+
+	return kpatch_call_function_with_name(name);
 }
 
 // Dispatches to the correct kernel function, passing the arguments.
@@ -467,6 +475,8 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 		return sys_load_code((void *) a1, (void *) a2, (size_t) a3, (void *) a4);
 	case SYS_patch_function:
 		return sys_patch_function((const char *) a1, (void *) a2);
+	case SYS_call_function:
+		return sys_call_function((const char *) a1);
 	default:
 		return -E_INVAL;
 	}
