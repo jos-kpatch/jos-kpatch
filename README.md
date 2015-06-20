@@ -71,6 +71,31 @@ gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04)
 2. Loadable kernel module (that workds only one-time). See modules/ and user/insmod.c.
 3. User-space utilities. See user/kcall.c, user/kpatch.c and user/insmod.c
 
+### File changes
+
+```
+M       GNUmakefile
+A       README.md
+M       fs/Makefrag
+M       inc/elf.h
+M       inc/error.h
+M       inc/lib.h
+M       inc/syscall.h
+M       kern/Makefrag
+M       kern/init.c
+A       kern/kpatch.c
+A       kern/kpatch.h
+M       kern/syscall.c
+A       kpatch/strip_fentry_call.rb
+M       lib/printfmt.c
+M       lib/syscall.c
+A       modules/Makefrag
+A       modules/test.c
+A       user/insmod.c
+A       user/kcall.c
+A       user/kpatch.c
+```
+
 ### Division of work
 
 * 杨俊睿 Host system patch generatation
